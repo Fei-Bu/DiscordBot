@@ -6,9 +6,9 @@ import argparse
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-n', '--name', default='yuki', metavar='',
-                        help='your name as a string', type= str)
+        help='your name as a string', type= str)
     parser.add_argument('-k', '--keyword', default='ghz', metavar='',
-                        help='keyword as a string', type= str)
+        help='keyword as a string', type= str)
     args = parser.parse_args()
 
 browser = webdriver.Chrome()
