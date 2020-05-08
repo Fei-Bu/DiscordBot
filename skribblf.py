@@ -48,8 +48,8 @@ def main():
     args = parser.parse_args()
     print(args.keywordlist)
     try:
-        if len(args.keywordlist) == 1:
-            return all_keywords.append(search(k))
+        if len(args.keywordlist) == 1 or isinstance(args.keywordlist, string):
+            return search(args.keywordlist[0])
         else:
             all_keywords = []
             for k in args.keywordlist:
