@@ -26,7 +26,7 @@ def search(keyword):
         submit = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#search-button')))
         input.send_keys(keyword)
         submit.click()
-        get_words()
+        return get_words()
     except TimeoutException:
         return search()
 
@@ -37,8 +37,8 @@ def get_words():
     soup = BeautifulSoup(html, 'html.parser')
     word_section = soup.find(class_="words")
     word_raw = word_section.find_all(class_="item")
-    word_list = [word.get_text() for word in word_raw[:10]]
-    print(word_list)
+    word_list = [word.get_text() for word in word_raw[:100]]
+    return word_list
 
 
 def main():
@@ -48,12 +48,17 @@ def main():
     args = parser.parse_args()
     print(args.keywordlist)
     try:
-        for k in args.keywordlist:
-            search(k)
+        if len(args.keywordlist) == 1 or isinstance(args.keywordlist, string):
+            return search(args.keywordlist[0])
+        else:
+            all_keywords = []
+            for k in args.keywordlist:
+                all_keywords.append(search(k))
+            return list(set.intersection(*map(set, all_keywords)))
     except Exception:
         print('Error!!!!!')
     finally:
         browser.close()
 
 if __name__ == '__main__':
-    main()
+    print(main())
