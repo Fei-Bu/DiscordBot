@@ -48,13 +48,13 @@ def main():
     args = parser.parse_args()
     print(args.keywordlist)
     try:
-        if len(args.keywordlist) == 1 or isinstance(args.keywordlist, string):
-            return search(args.keywordlist[0])
-        else:
-            all_keywords = []
-            for k in args.keywordlist:
-                all_keywords.append(search(k))
-            return list(set.intersection(*map(set, all_keywords)))
+        # if len(args.keywordlist) == 1 or isinstance(args.keywordlist, string):
+        #     return search(args.keywordlist[0])
+        # else:
+        all_keywords = []
+        for k in args.keywordlist:
+            all_keywords.append(search(k))
+        return list(set.intersection(*map(set, all_keywords)))
     except Exception:
         print('Error!!!!!')
     finally:
