@@ -43,28 +43,18 @@ def get_words():
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-k', '--keywordlist', default=['Math'], metavar='', nargs='*',
-                        help='keyword as a list')
-    parser.add_argument('-b', '--bannedwordlist', default=['bad'], metavar='', nargs='*',
-                        help='banned words as a list')
+    parser.add_argument('-l', '--keywordlist', default='Math', metavar='', nargs='*',
+                        help='keyword as a list', type= str)
     args = parser.parse_args()
     print(args.keywordlist)
     try:
-        all_keywords = []
-        for k in args.keywordlist:
-            all_keywords.append(search(k))
-        related_keywords = list(set.intersection(*map(set, all_keywords)))
-
-        all_banned_words = []
-        for k in args.bannedwordlist:
-            all_banned_words.append(search(k))
-        related_banned_keywords = list(set.intersection(*map(set, all_banned_words)))
-
-        for word in related_banned_keywords:
-            if word in related_keywords:
-                related_keywords.remove(word)
-        
-        return related_keywords
+        if len(args.keywordlist) == 1 or isinstance(args.keywordlist, string):
+            return search(args.keywordlist[0])
+        else:
+            all_keywords = []
+            for k in args.keywordlist:
+                all_keywords.append(search(k))
+            return list(set.intersection(*map(set, all_keywords)))
     except Exception:
         print('Error!!!!!')
     finally:
