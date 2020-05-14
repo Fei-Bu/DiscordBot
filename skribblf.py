@@ -54,13 +54,11 @@ def main():
         for k in args.keywordlist:
             all_keywords.append(search(k))
         related_keywords = list(set.intersection(*map(set, all_keywords)))
-        print(related_keywords)
 
         all_banned_words = []
         for k in args.bannedwordlist:
             all_banned_words.append(search(k))
         related_banned_keywords = list(set.intersection(*map(set, all_banned_words)))
-        print(related_banned_keywords)
 
         for word in related_banned_keywords:
             if word in related_keywords:
