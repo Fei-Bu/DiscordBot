@@ -19,7 +19,7 @@ wait = WebDriverWait(browser, 10)
 def search(keyword):
     print('Searching', keyword)
     try:
-        browser.get('https://reversedictionary.org/')
+        browser.get('https://relatedwords.org')
         input = wait.until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, '#query'))
         )
@@ -37,30 +37,34 @@ def get_words():
     soup = BeautifulSoup(html, 'html.parser')
     word_section = soup.find(class_="words")
     word_raw = word_section.find_all(class_="item")
-    word_list = [word.get_text() for word in word_raw[:100]]
+    word_list = [word.get_text() for word in word_raw]
     return word_list
 
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-k', '--keywordlist', default=['Math'], metavar='', nargs='*',
+    parser.add_argument('-k', '--keywordlist', default=['circle'], metavar='', nargs='*',
                         help='keyword as a list')
-    parser.add_argument('-b', '--bannedwordlist', default=['bad'], metavar='', nargs='*',
+    parser.add_argument('-b', '--bannedwordlist', default=['triangle'], metavar='', nargs='*',
                         help='banned words as a list')
     args = parser.parse_args()
-    print(args.keywordlist)
+    print('Keywords are :', args.keywordlist)
+    print('Avoid words are :', args.bannedwordlist)
     try:
         all_keywords = []
         for k in args.keywordlist:
             all_keywords.append(search(k))
         related_keywords = list(set.intersection(*map(set, all_keywords)))
-
-        all_banned_words = []
+        print(related_keywords)
+		
+        all_banned_words = args.bannedwordlist
         for k in args.bannedwordlist:
-            all_banned_words.append(search(k))
+            all_banned_words = all_banned_words + search(k)
+            #all_banned_words.append(search(k))
         related_banned_keywords = list(set.intersection(*map(set, all_banned_words)))
-
-        for word in related_banned_keywords:
+        # related_banned_keywords is the intersection of bannedwordlist, while we want to ban all their words.
+        # changed to all_banned_words
+        for word in all_banned_words:
             if word in related_keywords:
                 related_keywords.remove(word)
         
